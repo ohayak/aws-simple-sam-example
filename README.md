@@ -9,7 +9,7 @@ This serverless deployment example with serverless application Lambda + ApiGatew
 │   └── Lambda                  <-- Source directory for lambda function
 │       ├── lambda.py           <-- handler code for lambda function
 │       ├── test                <-- test folder
-│           └── event.json      <-- event example to test function
+│       │   └── event.json      <-- event example to test function
 │       └── requirements.txt    <-- Python dependencies
 ├── buildspec.yaml              <-- Build specification used by AWS CodeBuild
 ├── Makefile                    <-- Makefile
