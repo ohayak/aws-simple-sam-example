@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - make install
+
+  build:
+    commands:
+      - make build
+  
+  post_build:
+    commands:
+      - make package
+
+artifacts:
+  type: zip
+  files:
+    - .aws-sam/build/packaged.yaml
+  discard-paths: yes

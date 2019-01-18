@@ -1,0 +1,108 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform:
+- AWS::Serverless-2016-10-31
+
+Parameters:
+  ProjectId:
+    Default: aws-simple-sam-example
+    Type: String
+    Description: projectId used to identify resources
+
+# Enable blue/green deployments using this Globals section. For instructions, see the AWS CodeStar User Guide:
+# https://docs.aws.amazon.com/codestar/latest/userguide/how-to-modify-serverless-project.html?icmpid=docs_acs_rm_tr
+
+
+Resources:
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Join
+        - "-"
+        - - !Ref ProjectId
+          - !Ref ApiGateway
+      StageName: v1
+      EndpointConfiguration: EDGE
+      MethodSettings: [{
+        # Turn on Error logging
+        "LoggingLevel": "ERROR",
+        
+        # Enable Metrics
+        "MetricsEnabled": True,
+        
+        # Trace-level Logging
+        "DataTraceEnabled": True,
+        
+        # On all Paths & methods
+        "ResourcePath": "/*",
+        "HttpMethod": "*",
+      }]
+      DefinitionBody: 
+        swagger: "2.0"
+        paths:
+          '/hello':
+            get:
+              summary: Get csv from Casel
+              description: >
+                say hello.
+              responses:
+                '200':
+                  description: OK
+                '400':
+                  description: KO, Unsupported path or method
+              # parameters:
+              #   - name: size
+              #     in: path
+              #     description: Csv size
+              #     required: false
+              #     schema:
+              #       type: integer
+              #       format: int64
+              x-amazon-apigateway-integration:
+                httpMethod: post
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Lambda.Arn}/invocations"
+                type: aws_proxy
+        # x-amazon-apigateway-policy:
+        #   Version: '2012-10-17'
+        #   Statement:
+        #   - Action: execute-api:Invoke
+        #     Condition:
+        #       IpAddress:
+        #         aws:SourceIp:
+        #         - 0.0.0.0
+        #     Effect: Allow
+        #     Principal: '*'
+        #     Resource: execute-api:/*
+  Lambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join
+        - "-"
+        - - !Ref ProjectId
+          - !Ref Lambda
+      CodeUri: Resources/Lambda
+      Handler: lambda.handler
+      Runtime: python3.6
+      Timeout: 60
+      # VpcConfig:
+      #   SecurityGroupIds:
+      #     - sg-0bd112ec76a3a0af5 
+      #   SubnetIds:
+      #     - subnet-0c2f7056bf9e0623d
+      #     - subnet-070e9c5be6624edd9
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSConfigRulesExecutionRole
+        - VPCAccessPolicy: {}
+      Environment:
+        Variables:
+          REGION: eu-west-1
+      Events:
+        ApiCall:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /hello
+            Method: get
+Outputs:
+  ApiUrl:
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/v1/"

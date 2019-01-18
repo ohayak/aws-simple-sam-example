@@ -1,0 +1,7 @@
+{
+    "queryStringParameters": {},
+    "requestContext":{
+        "resourcePath": "/hello",
+        "httpMethod": "GET"
+    }
+}
