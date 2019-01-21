@@ -1,4 +1,4 @@
-# askr-casel-extract
+# SAM Example with Lambda and ApiGateway 
 
 This serverless deployment example with serverless application Lambda + ApiGateway
 
