@@ -4,9 +4,9 @@ import logging
 import os
 import sys
 
-logging.basicConfig(level=logging.INFO)
-
-logging.info('Loading function')
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+log.info('Loading function')
 
 REGION = os.environ['REGION']
 
@@ -22,7 +22,7 @@ def respond(err, res=None, head=None):
     return res
 
 def handler(event, context):
-    logging.info('Running handler')
+    log.info('Running handler')
     operations = {
         '/hello/GET': respond(None, "hello World!"),
     }
@@ -35,7 +35,7 @@ def handler(event, context):
     operation = "{}/{}".format(path, method)
 
     if operation in operations:
-        logging.info("starting operation: {}".format(operation))
+        log.info("starting operation: {}".format(operation))
         return operations[operation](event, context)
     else:
         return respond(ValueError('Unsupported path or method"{}"'.format(operation)))

@@ -4,17 +4,14 @@ phases:
   install:
     commands:
       - make install
-
   build:
     commands:
       - make build
-  
   post_build:
     commands:
       - make package
-
 artifacts:
   type: zip
   files:
-    - .aws-sam/build/packaged.yaml
+    - .aws-sam/build/packaged.yml
   discard-paths: yes

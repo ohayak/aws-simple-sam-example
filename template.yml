@@ -25,23 +25,23 @@ Resources:
       MethodSettings: [{
         # Turn on Error logging
         "LoggingLevel": "ERROR",
-        
+
         # Enable Metrics
         "MetricsEnabled": True,
-        
+
         # Trace-level Logging
         "DataTraceEnabled": True,
-        
+
         # On all Paths & methods
         "ResourcePath": "/*",
         "HttpMethod": "*",
       }]
-      DefinitionBody: 
+      DefinitionBody:
         swagger: "2.0"
         paths:
           '/hello':
             get:
-              summary: Get csv from Casel
+              summary: say hello
               description: >
                 say hello.
               responses:
@@ -85,7 +85,7 @@ Resources:
       Timeout: 60
       # VpcConfig:
       #   SecurityGroupIds:
-      #     - sg-0bd112ec76a3a0af5 
+      #     - sg-0bd112ec76a3a0af5
       #   SubnetIds:
       #     - subnet-0c2f7056bf9e0623d
       #     - subnet-070e9c5be6624edd9

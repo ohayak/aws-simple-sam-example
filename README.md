@@ -1,4 +1,4 @@
-# SAM Example with Lambda and ApiGateway 
+# SAM Example with Lambda and ApiGateway
 
 This serverless deployment example with serverless application Lambda + ApiGateway
 
@@ -11,9 +11,9 @@ This serverless deployment example with serverless application Lambda + ApiGatew
 │       ├── test                <-- test folder
 │       │   └── event.json      <-- event example to test function
 │       └── requirements.txt    <-- Python dependencies
-├── buildspec.yaml              <-- Build specification used by AWS CodeBuild
+├── buildspec.yml              <-- Build specification used by AWS CodeBuild
 ├── Makefile                    <-- Makefile
-└── template.yaml               <-- SAM Template
+└── template.yml               <-- SAM Template
 ```
 
 ## Requirements
@@ -28,7 +28,7 @@ This serverless deployment example with serverless application Lambda + ApiGatew
 
 ### Define project
 
-Go to Makefile and make sure that following variables are wll defined:
+Go to Makefile and make sure that following variables are correctly defined:
     - `S3_BUCKET` where lambda packaged code will be stored
     - `S3_PREFIX` prefix within S3 bucket
     - `STACK_NAME` CloudFormation stack name
@@ -38,11 +38,11 @@ Go to Makefile and make sure that following variables are wll defined:
 
 [AWS Lambda requires a flat folder](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html) with the application as well as its dependencies. When you make changes to your source code or dependency manifest,
 run the following command to build your project local testing and deployment:
- 
+
 ```bash
 make build
 ```
- 
+
 By default, this command writes built artifacts to `.aws-sam/build` folder.
 
 **Invoking function locally**

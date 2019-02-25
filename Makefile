@@ -1,5 +1,5 @@
-S3_BUCKET=
-S3_PREFIX=
+S3_BUCKET="my-s3-bucket"
+S3_PREFIX="my-s3-prefix"
 STACK_NAME=aws-simple-sam-example
 
 BUILDDIR=.aws-sam
@@ -13,16 +13,20 @@ install:
 build:
 	sam build --use-container --debug
 
-package: build
+.ONESHELL:
+package:
+	cd $(BUILDDIR)/build
 	sam package --debug \
-	--template $(BUILDDIR)/build/template.yaml \
+	--template template.yml \
 	--s3-bucket $(S3_BUCKET) \
 	--s3-prefix $(S3_PREFIX) \
-	--output-template $(BUILDDIR)/build/packaged.yaml
+	--output-template packaged.yml
 
-deploy: package
+.ONESHELL:
+deploy:
+	cd $(BUILDDIR)/build
 	sam deploy --debug \
-    --template-file $(BUILDDIR)/build/packaged.yaml \
+    --template-file packaged.yml \
     --stack-name $(STACK_NAME) \
     --capabilities CAPABILITY_IAM \
     --region eu-west-1
